@@ -1,0 +1,127 @@
+/* DoctorProfile.css */
+.profile_container {
+    padding:70px;
+    margin: 20px 80px;
+  }
+  .profile-img-detail{
+    display: flex;
+    gap:30px;
+  }
+  .profile-pic {
+    width: 150px; 
+    height: 150px; 
+    border-radius: 50%; 
+    overflow: hidden; 
+    border: 2px solid #ccc;
+  }
+  .profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+  }
+  .profile_box {
+    border: 1px solid #ccc; 
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    border-radius: 8px; 
+  }
+  
+  .profile_details {
+    margin-right: 20px;
+  }
+  
+  .profile_name {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color:#283779;
+  }
+  
+  .profile_specialization,
+  .profile_address,
+  .profile_email {
+    margin: 5px 0;
+  }
+
+  
+  .profile_button {
+    margin: 5px ;
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    margin-top: auto; 
+  }
+  .profile_actions {
+    margin-top: auto;
+  }
+  .profile_button.add_review {
+    background-color: #28a745;
+  }
+  
+  .profile_about_section {
+    margin-bottom: 20px;
+  }
+  
+  .profile_description {
+    margin: 0;
+  }
+  
+  .profile_container h3{
+    color:#283779;
+  }
+  /* .slick-slide {
+    display: flex;
+    justify-content: center;
+  } */
+  .profile_review_card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 10px ;
+    width: calc(33.333% - 20px);
+    box-sizing: border-box;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    border-radius: 8px; 
+    background-color:#d9eafd;
+  }
+  .review_top{
+    display:flex;
+    gap:10px;
+  }
+  .review_acr{
+    width: 50px; 
+    height: 50px; 
+    border-radius: 50%; 
+    overflow: hidden; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; background-color: #283779;
+  }
+  .acr_content{
+    max-width: 100%; 
+    max-height: 100%; 
+    object-fit: cover; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+  .profile_review_card h4 {
+    color: #283779;
+    font-size: 18px;
+  }
+  
+  .profile_review_card p {
+    margin: 5px 0;
+  }
+  .review_name {
+    line-height: 0;
+  }
+  .star{
+    color:orange;
+  }
