@@ -1,8 +1,94 @@
 .home {
     font-family: Arial, sans-serif;
 }
+.home-hero-wrap {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    background-image: url('../../../public/image/wavebg2.svg');
+    background-size: cover;
+    background-position: center;
+    overflow-x: hidden;
+}
 
-.hero {
+.home-hero-pattern1 {
+    position: absolute;
+    top: 30%;
+    left: 0;
+}
+
+.home-hero-pattern2 {
+    position: absolute;
+    top: 40%;
+    right: 20px;
+}
+
+.home-hero {
+    width: 100%;
+    min-height: 90vh;
+    padding: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.home-hero img {
+    width: 640px;
+    position: relative;
+    z-index: 2;
+}
+
+.home-hero-text {
+    max-width: 600px;
+    position: relative;
+    z-index: 2;
+}
+
+.home-hero-text h1 {
+    font-weight: 400;
+    font-size: 2.6rem;
+    color: #09263F;
+}
+
+.home-hero-text h1 span {
+    font-weight: 900;
+    font-size: 2.6rem;
+}
+
+.home-hero-text p {
+    padding: 6px 0px 28px 0px;
+}
+
+.home-hero-text button {
+    padding: 14px 40px;
+    background: #09263f;
+    color: aliceblue;
+    font-weight: 500;
+    border-radius: 60px;
+}
+
+@media (max-width: 620px) {
+    .home-hero {
+        flex-direction: column;
+        gap: 40px;
+        padding: 80px 20px;
+    }
+
+    .home-hero img {
+        width: 100%;
+    }
+
+    .home-hero-text {
+        max-width: 100%;
+        width: 100%;
+        text-align: center;
+    }
+
+    .home-hero-text h1 {
+        font-size: 2.4rem;
+    }
+}
+/* .hero {
     background-color: #F4F7F6;
     color: #FFFFFF;
     padding: 100px 0;
@@ -56,7 +142,7 @@
 .cta-button:hover {
     background-color: #F2994A;
     color: #FFFFFF;
-}
+} */
 
 .features {
     padding: 50px 20px;
@@ -94,7 +180,7 @@
 }
 
 .feature-content h2 {
-    color: #283779;
+    color: #09263F;
     font-size: 2.5em;
     
 }
@@ -104,7 +190,7 @@
 }
 
 .feature-button {
-    background-color: #283779;
+    background-color: #09263F;
     color: #FFFFFF;
     border: none;
     padding: 10px 20px;
@@ -115,7 +201,7 @@
 }
 
 .feature-button:hover {
-    background-color: #219653;
+    background-color: #164975;
 }
 
 .feature-image {

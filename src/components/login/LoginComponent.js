@@ -1,15 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Login.css';
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Username:', username);
-        console.log('Password:', password);
-    };
+      
+        try {
+          const response = await axios.post('http://127.0.0.1:8000/api/auth/login/', {
+            username,
+            password,
+          });
+      
+          if (response.data.token) {
+            console.log('Login successful');
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('first_name', response.data.first_name);
+            localStorage.setItem('last_name', response.data.last_name);
+            localStorage.setItem('id', response.data.id);
+            navigate('/')
+          } else {
+            console.error('Login failed:', response.data.error);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
 
     return (
         <div className="login-container">

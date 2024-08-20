@@ -1,4 +1,7 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInstagram, faTwitter, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import './Footer.css';
 
 const Footer = () => {
@@ -16,16 +19,21 @@ const Footer = () => {
           <li><a href="#terms-of-service">Terms of Service</a></li>
         </ul>
       </div>
-      <div className="contact-info">
-        <p>Address: 123 HealthCare St, Wellness City</p>
-        <p>Phone: (123) 456-7890</p>
-        <p>Email: contact@healthcare.com</p>
+      <div className="social-media-icons">
+        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+          <FontAwesomeIcon icon={faInstagram} className="icon" />
+        </a>
+        <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
+          <FontAwesomeIcon icon={faTwitter} className="icon" />
+        </a>
+        <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
+          <FontAwesomeIcon icon={faLinkedin} className="icon" />
+        </a>
+        <a href="mailto:your-email@gmail.com">
+          <FontAwesomeIcon icon={faEnvelope} className="icon" />
+        </a>
       </div>
-      <div className="social-media">
-        <a href="#facebook"><i className="fab fa-facebook-f"></i></a>
-        <a href="#twitter"><i className="fab fa-twitter"></i></a>
-        <a href="#linkedin"><i className="fab fa-linkedin-in"></i></a>
-      </div>
+      <div className="footer_line">Healing with care, embraced with trust.</div>
     </footer>
   );
 };

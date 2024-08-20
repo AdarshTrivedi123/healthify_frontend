@@ -1,11 +1,46 @@
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './search_doctor.css';
 
 const SearchDoctorPage = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
+  const [doctors, setDoctors] = useState([]);
+  const [searchResult, setSearchResult] = useState([]);
+  const [renderSearch, setRenderSearch] = useState(false);
+  const [searchCity, setSearchCity] = useState('');
+  const [searchSpecialization, setSearchSpecialization] = useState('');
+  const [specializations] = useState(['General Physician', 'Pediatrician', 'Cardiologist']);
+
+  useEffect(() => {
+    // Fetch the initial doctor data
+    axios.get('http://127.0.0.1:8000/api/doctors/')
+      .then(response => {
+        setDoctors(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the doctors!', error);
+      });
+  }, []);
+
+  const handleSearch = () => {
+    const params = {};
+    if (searchCity) {
+      params.city = searchCity;
+    }
+    if (searchSpecialization) {
+      params.specialization = searchSpecialization;
+    }
+
+    axios.get('http://localhost:8000/api/filter/doctor/', { params })
+      .then(response => {
+        setSearchResult(response.data);
+        setRenderSearch(true)
+      })
+      .catch(error => {
+        console.error('There was an error filtering the doctors!', error);
+      });
+  };
 
   const handleMouseEnter = () => {
     setDropdownVisible(true);
@@ -18,57 +53,6 @@ const SearchDoctorPage = () => {
   const toggleAccordion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
-
-  const doctors = [
-    {
-      name: "Dr. John Doe",
-      qualifications: "MBBS, MD",
-      location: "New York, NY",
-      description: "Experienced in treating various medical conditions.",
-    },
-    {
-      name: "Dr. Jane Smith",
-      qualifications: "MBBS, MD",
-      location: "Los Angeles, CA",
-      description: "Specializes in chronic disease management.",
-    },
-    {
-      name: "Dr. Alice Brown",
-      qualifications: "MBBS, MD",
-      location: "Chicago, IL",
-      description: "Expert in preventive medicine and health education.",
-    },
-    {
-      name: "Dr. Mark Wilson",
-      qualifications: "MBBS, MD",
-      location: "Houston, TX",
-      description: "Renowned for patient-centered care and treatment.",
-    },
-    {
-      name: "Dr. Linda Davis",
-      qualifications: "MBBS, MD",
-      location: "Phoenix, AZ",
-      description: "Skilled in diagnosing and treating various ailments.",
-    },
-    {
-      name: "Dr. Michael Johnson",
-      qualifications: "MBBS, MD",
-      location: "Philadelphia, PA",
-      description: "Focuses on holistic and integrative approaches.",
-    },
-    {
-      name: "Dr. Michael Johnson",
-      qualifications: "MBBS, MD",
-      location: "Philadelphia, PA",
-      description: "Focuses on holistic and integrative approaches.",
-    },
-    {
-      name: "Dr. Michael Johnson",
-      qualifications: "MBBS, MD",
-      location: "Philadelphia, PA",
-      description: "Focuses on holistic and integrative approaches.",
-    },
-  ];
 
   const faqs = [
     {
@@ -96,83 +80,80 @@ const SearchDoctorPage = () => {
   return (
     <div className="search-doctor-page">
       <div className="search-filters">
-        {/* <input
-          type="text"
-          className="search-input"
-          placeholder={<><FontAwesomeIcon icon={faLocationDot} /> Filter based on City</>}
-        /> */}
-
         <input
           type="text"
           className="search-input"
-          placeholder="&#x1F4CD; Filter based on City"
+          placeholder="Filter based on City"
+          value={searchCity}
+          onChange={(e) => setSearchCity(e.target.value)}
         />
-        <input
-          type="text"
+        <select
           className="search-input"
-          placeholder="Filter based on Specialization"
-        />
+          value={searchSpecialization}
+          onChange={(e) => setSearchSpecialization(e.target.value)}
+        >
+          {/* <option value="">Filter based on Specialization</option> */}
+          {specializations.map((specialization, index) => (
+            <option key={index} value={specialization}>{specialization}</option>
+          ))}
+        </select>
+        <button onClick={handleSearch}>Search</button>
       </div>
 
-      <div className="doctor-section">
-        <h2 className="searchtype_heading">General Physicians</h2>
-        <div className="doctor-cards">
-          {doctors.slice(0, 4).map((doctor, index) => (
-            <div className="doctor-card-wrap" key={index}>
-              <div className="doctor-card">
-                <h3>{doctor.name}</h3>
-                <p>{doctor.qualifications}</p>
-                <p>{doctor.location}</p>
-                <p>{doctor.description}</p>
+      {renderSearch ? (
+        <div className="doctor-section">
+          <h2 className="searchtype_heading">Search Results</h2>
+          <div className="doctor-cards">
+            {searchResult.map((doctor, index) => (
+              <div className="doctor-card-wrap" key={index}>
+                <div className="doctor-card">
+                  <div className='name'>{doctor.user.username}</div>
+                  <div className='specialization'>{doctor.specialization}</div>
+                  <div className='specialization'>{doctor.city}</div>
+                  <div className='description'>{doctor.description}</div>
+                </div>
+                <button className="doctor-card-button"><a href={`/doctor/${doctor.id}`}>View Profile</a></button>
               </div>
-              <button className="doctor-card-button"><a href="/profiledoc">View Profile</a></button>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-        <div className="doctor-cards">
-          {doctors.slice(3, 6).map((doctor, index) => (
-            <div className="doctor-card-wrap" key={index}>
-              <div className="doctor-card">
-                <h3>{doctor.name}</h3>
-                <p>{doctor.qualifications}</p>
-                <p>{doctor.location}</p>
-                <p>{doctor.description}</p>
-              </div>
-              <button className="doctor-card-button">View Profile</button>
+      ) : (
+        <div>
+          <div className="doctor-section">
+            <h2 className="searchtype_heading">General Physicians</h2>
+            <div className="doctor-cards">
+              {doctors.filter(doctor => doctor.specialization.toLowerCase() === 'general physician').map((doctor, index) => (
+                <div className="doctor-card-wrap" key={index}>
+                  <div className="doctor-card">
+                    <div className='name'>{doctor.user.username}</div>
+                    <div className='specialization'>{doctor.specialization}</div>
+                    <div className='specialization'>{doctor.city}</div>
+                    <div className='description'>{doctor.description}</div>
+                  </div>
+                  <button className="doctor-card-button"><a href={`/doctor/${doctor.id}`}>View Profile</a></button>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
 
-      <div className="doctor-section">
-        <h2 className="searchtype_heading">Pediatrician</h2>
-        <div className="doctor-cards">
-          {doctors.slice(0, 4).map((doctor, index) => (
-            <div className="doctor-card-wrap" key={index}>
-              <div className="doctor-card">
-                <h3>{doctor.name}</h3>
-                <p>{doctor.qualifications}</p>
-                <p>{doctor.location}</p>
-                <p>{doctor.description}</p>
-              </div>
-              <button className="doctor-card-button">View Profile</button>
+          {/* <div className="doctor-section">
+            <h2 className="searchtype_heading">Pediatricians</h2>
+            <div className="doctor-cards">
+              {doctors.filter(doctor => doctor.specialization.toLowerCase() === 'pediatrician').map((doctor, index) => (
+                <div className="doctor-card-wrap" key={index}>
+                  <div className="doctor-card">
+                    <div className='name'>{doctor.user.username}</div>
+                    <div className='specialization'>{doctor.specialization}</div>
+                    <div className='specialization'>{doctor.city}</div>
+                    <div className='description'>{doctor.description}</div>
+                  </div>
+                  <button className="doctor-card-button"><a href={`/doctor/${doctor.id}`}>View Profile</a></button>
+                </div>
+              ))}
             </div>
-          ))}
+          </div> */}
         </div>
-        <div className="doctor-cards">
-          {doctors.slice(4, 8).map((doctor, index) => (
-            <div className="doctor-card-wrap" key={index}>
-              <div className="doctor-card">
-                <h3>{doctor.name}</h3>
-                <p>{doctor.qualifications}</p>
-                <p>{doctor.location}</p>
-                <p>{doctor.description}</p>
-              </div>
-              <button className="doctor-card-button">View Profile</button>
-            </div>
-          ))}
-        </div>
-      </div>
+      )}
 
       <div className="faq-section">
         <h2>FAQ</h2>
@@ -188,7 +169,6 @@ const SearchDoctorPage = () => {
         ))}
       </div>
     </div>
-  
   );
 };
 

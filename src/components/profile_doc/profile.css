@@ -56,8 +56,21 @@
     cursor: pointer;
     margin-top: auto; 
   }
+
+  .date-picker {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
   .profile_actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
     margin-top: auto;
+  }
+  
+  .profile_button.book_now {
+    margin-top: 10px;
   }
   .profile_button.add_review {
     background-color: #28a745;
@@ -78,7 +91,36 @@
     display: flex;
     justify-content: center;
   } */
-  .profile_review_card {
+  .review-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    max-width: 400px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  .review-header h3 {
+    margin: 0;
+  }
+  
+  .review-rating {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .review-content {
+    font-size: 14px;
+    color: #555;
+  }
+  /* .profile_review_card {
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 15px;
@@ -124,4 +166,4 @@
   }
   .star{
     color:orange;
-  }
+  } */

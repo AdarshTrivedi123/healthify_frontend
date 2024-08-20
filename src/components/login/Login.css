@@ -16,15 +16,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 93vh;
 }
 
 .screen {
   background: linear-gradient(90deg, #B1DBEC, #283779);
   position: relative;
-  height: 600px;
-  width: 360px;
+  height: fit-content;
+  min-height: 500px;
+  width: 450px;
   box-shadow: 0px 0px 24px #283779;
+  display:flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .screen__content {
@@ -86,9 +90,11 @@
 }
 
 .login {
-  width: 320px;
+  width: 400px;
   padding: 30px;
-  padding-top: 156px;
+  /* padding-top: 156px; */
+  /* display: flex;
+  flex-direction: column; */
 }
 
 .login__field {
@@ -106,10 +112,10 @@
   border: none;
   border-bottom: 2px solid #D1D1D4;
   background: none;
-  padding: 10px;
+  padding: 4px;
   padding-left: 24px;
   font-weight: 700;
-  width: 75%;
+  width: 80%;
   transition: .2s;
 }
 

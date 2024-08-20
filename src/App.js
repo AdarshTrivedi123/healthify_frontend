@@ -6,10 +6,11 @@ import HeaderComponent from './components/header/HeaderComponent';
 import FooterComponent from './components/footer/FooterComponent';
 import LoginComponent from './components/login/LoginComponent';
 import SignupDocComponent from './components/login/SignupDocComponent.js';
-import SignupPatComponent from './components/login/SignupPatComponent.js';
+import SignupPatComponent from './components/login/SignupPatComponent.jsx';
 import SearchDoctorPage from './components/search/search_doctor.js';
 import Profile_Component from './components/profile_doc/Profile_Component.js';
 import StoreComponent from './components/store/StoreComponent.js';
+import DashboardComponent from './components/dashboard/DashboardComponent.jsx';
 // import BlogComponent from './components/BlogComponent';
 
 
@@ -23,10 +24,10 @@ const App = () => {
         <Route path="/signup-doctor" element={<SignupDocComponent/>} />
         <Route path="/signup-patient" element={<SignupPatComponent/>} />
         <Route path="/appointments" element={<SearchDoctorPage/>} />
-        <Route path="/profiledoc" element={<Profile_Component/>} />
+        <Route path="/doctor/:id" element={<Profile_Component/>} />
         <Route path="/store" element={<StoreComponent/>} />
-         {/*<Route path="/store" component={StoreComponent} />
-        <Route path="/blog" component={BlogComponent} />  */}
+        <Route path="/dashboard" element={<DashboardComponent/>} />
+        {/* {<Route path="/blog" component={BlogComponent} />} */}
       </Routes>
       <FooterComponent />
      </>

@@ -1,113 +1,175 @@
-import React from 'react';
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import axios from 'axios';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import './profile.css';
+
 const DoctorProfile = () => {
-  const settings = {
-    dots: true, // Show navigation dots
-    infinite: true, // Infinite scrolling
-    speed: 500, // Transition speed
-    slidesToShow: 3, // Number of cards to show at once
-    slidesToScroll: 1, // Number of cards to scroll at once
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true
-        }
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          initialSlide: 2
-        }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1
-        }
-      }
-    ]
-  };
-  const reviews = [
-    {
-      acr: 'JS',
-      patientName: 'Jane Smith',
-      date: '2023-07-09',
-      text: 'Excellent care and attention.',
-      rating: '★★★★★'
-    },
-    {
-      acr: 'JB',
-      patientName: 'John Brown',
-      date: '2023-07-08',
-      text: 'Very professional and kind.',
-      rating: '★★★★☆'
-    },
-    {
-      acr: 'JB',
-      patientName: 'John Brown',
-      date: '2023-07-08',
-      text: 'Very professional and kind.',
-      rating: '★★★★☆'
+  const { id } = useParams();
+  const [doctor, setDoctor] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [bookingDate, setBookingDate] = useState(null);
+  const [reviewText, setReviewText] = useState('');
+  const [rating, setRating] = useState(0);
+
+  useEffect(() => {
+
+    axios.get(`http://localhost:8000/api/doctor/${id}`)
+      .then(response => {
+        setDoctor(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the doctor!', error);
+      });
+
+
+    axios.get(`http://localhost:8000/api/doctor/${id}/reviews/`)
+      .then(response => {
+        console.log('Reviews data:', response.data);
+        setReviews(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the reviews!', error);
+      });
+  }, [id]);
+
+  const handleBooking = () => {
+    const token = localStorage.getItem('token');
+    if (!bookingDate) {
+      alert('Please select a date to book an appointment');
+      return;
     }
-    // Add more reviews as needed
-  ];
+    const localDate = new Date(bookingDate.getTime() - bookingDate.getTimezoneOffset() * 60000)
+      .toISOString().split('T')[0];
+
+    axios.post(`http://localhost:8000/api/book_appointment/${id}/`, {
+      patient_id: localStorage.getItem('id'),
+      date: localDate,
+    }, {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then(response => {
+        alert(`Appointment booked! Your booking number is ${response.data.booking_number}`);
+      })
+      .catch(error => {
+        alert('Error booking appointment');
+      });
+  };
+
+  const handleReviewSubmit = (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    axios.post(`http://localhost:8000/api/doctor/${id}/reviews/`, {
+      review_text: reviewText,
+      rating: rating,
+    }, {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then(response => {
+        alert('Review submitted successfully');
+        setReviews([...reviews, response.data]);
+        setReviewText('');
+        setRating(0);
+      })
+      .catch(error => {
+        alert('Error submitting review');
+      });
+  };
+
+  if (!doctor) return <div>Loading...</div>;
+
   return (
     <div className="profile_container">
       <div className="profile_box">
         <div className='profile-img-detail'>
-          <div class="profile-pic">
+          <div className="profile-pic">
             <img src="/image/doc1.png" alt="Profile Picture" />
           </div>
           <div className="profile_details">
             <div>
-              <h2 className="profile_name">Mike John</h2>
-              <p className="profile_specialization"><span>Specialization:</span>  General Physician</p>
-              <p className="profile_address"><span>Location:</span>  address4252hj</p>
-              <p className="profile_email"><span>E-mail:</span>  doctor@gmail.com</p>
+              <h2 className="profile_name">{doctor.user.username}</h2>
+              <p className="profile_specialization"><span>Specialization:</span> {doctor.specialization}</p>
+              <p className="profile_address"><span>Location:</span> {doctor.city}</p>
+              <p className="profile_email"><span>E-mail:</span> doctor@gmail.com</p>
             </div>
           </div>
         </div>
         <div className="profile_actions">
-          <button className="profile_button book_now">Book Appointment</button>
-          <button className="profile_button add_review">Add Review</button>
+          <DatePicker
+            selected={bookingDate}
+            onChange={date => setBookingDate(date)}
+            dateFormat="yyyy-MM-dd"
+            className="date-picker"
+            placeholderText="Select a date"
+          />
+          <button className="profile_button book_now" onClick={handleBooking}>Book Appointment</button>
         </div>
       </div>
       <div className='profile_half'>
         <div className="profile_about_section">
           <h3>About</h3>
           <p className="profile_description">
-            Dr. XYZ is a highly esteemed general physician renowned for his comprehensive approach to patient care. With over 15 years of experience, he has earned a reputation for his compassionate demeanor and meticulous attention to detail. Dr. XYZ graduated from a prestigious medical school and completed his residency at a top-tier hospital, where he honed his skills in diagnosing and treating a wide range of medical conditions. His expertise spans from managing chronic illnesses such as diabetes and hypertension to providing acute care for common ailments like colds and infections. Patients admire Dr. XYZ for his ability to listen attentively and explain complex medical information in an understandable manner. He emphasizes preventive care and encourages a holistic approach to health, often integrating lifestyle modifications with medical treatments. Dr. XYZ is also known for his commitment to staying updated with the latest advancements in medicine, regularly attending professional conferences and participating in continuing education. Outside of his clinical duties, he actively engages in community health initiatives and volunteers his time at local health fairs. Dr. XYZ's dedication to his patients and his community makes him a trusted and beloved figure in the healthcare field.
+            {doctor.description}
           </p>
         </div>
         <div className="card-slider">
           <h3>Patient Reviews</h3>
-          <Slider {...settings}>
-            {reviews.map((review, index) => (
-              <div key={index} className="profile_review_card">
-                  <div className="review_top">
-                    <div className='review_acr'>
-                      <span className='acr_content'>{review.acr}</span>
+          <form onSubmit={handleReviewSubmit} className="review_form">
+            <div>
+              <label htmlFor="rating">Rating: </label>
+              <select
+                id="rating"
+                value={rating}
+                onChange={(e) => setRating(e.target.value)}
+              >
+                <option value="0">Select rating</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="reviewText">Review: </label>
+              <textarea
+                id="reviewText"
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+                className="review_textarea"
+              />
+            </div>
+            <button type="submit" className="profile_button">Add Review</button>
+          </form>
+          {reviews.length > 0 ? (
+            <Swiper spaceBetween={30} slidesPerView={3} centeredSlides={true}>
+              {reviews.map((review, index) => (
+                <SwiperSlide key={index}>
+                  <div className="review-card">
+                    <div className="review-header">
+                      <h3>{review.patient_name}</h3>
+                      <span>{review.date}</span>
                     </div>
-                    <div className='review_name'>
-                      <h4>{review.patientName}</h4>
-                      <p>{review.date}</p>
+                    <div className="review-rating">
+                      Rating: {review.rating}
+                    </div>
+                    <div className="review-content">
+                      {review.review_text}
                     </div>
                   </div>
-                  <p>{review.text}</p>
-                  {review.rating && <p>Rating:<span className='star'> {review.rating}</span></p>}
-                </div>
-            ))}
-          </Slider>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : (
+            <p>No reviews available.</p>
+          )}
         </div>
       </div>
     </div>

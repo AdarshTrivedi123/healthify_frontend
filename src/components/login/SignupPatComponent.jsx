@@ -3,45 +3,43 @@ import './Login.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const SignupD = () => {
+const SignupP = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
-    const [first_name, setFirstName] = useState('');
-    const [last_name, setLastName] = useState('');
-    const [city, setCity] = useState('');
+    const [email, setEmail] = useState('')
+    const [first_name, setFirstName] = useState('')
+    const [last_name, setLastName] = useState('')
+    const [city, setCity] = useState('')
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+      
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/auth/register/', {
-                username,
-                email,
-                first_name,
-                last_name,
-                type: 'doctor',
-                description: '',
-                specialization: '',
-                city,
-                password,
-            });
-
-            if (response.status == 201) {
-                console.log('SignUp successful');
-                localStorage.setItem('token', response.data.token);
-                localStorage.setItem('first_name', response.data.first_name);
-                localStorage.setItem('last_name', response.data.last_name);
-                navigate('/');
-            } else {
-                console.error('Signup failed:', response.data.error);
-            }
+          const response = await axios.post('http://127.0.0.1:8000/api/auth/register/', {
+            username,
+            email,
+            first_name,
+            last_name,
+            type: 'patient',
+            city,
+            password,
+          });
+      
+          if (response.status==201) {
+            console.log('SignUp successful');
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('first_name', response.data.first_name);
+            localStorage.setItem('last_name', response.data.last_name);
+            navigate('/');
+          } else {
+            console.error('Signup failed:', response.data.error);
+          }
         } catch (error) {
-            console.error('Error:', error);
+          console.error('Error:', error);
         }
-    };
+      };
 
     return (
         <div className="login-container">
@@ -99,6 +97,7 @@ const SignupD = () => {
                                     onChange={(e) => setCity(e.target.value)}
                                 />
                             </div>
+                            
                             <div className="login__field">
                                 <i className="login__icon fas fa-lock"></i>
                                 <input
@@ -109,7 +108,8 @@ const SignupD = () => {
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </div>
-
+                            
+                            
                             <button className="button login__submit" type="submit">
                                 <span className="button__text">Register Now</span>
                                 <i className="button__icon fas fa-chevron-right"></i>
@@ -128,4 +128,4 @@ const SignupD = () => {
     );
 };
 
-export default SignupD;
+export default SignupP;

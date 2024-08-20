@@ -1,5 +1,5 @@
 .header {
-    background-color:#283779;
+    background-color:#09263F;
     color: #FFFFFF;
     display: flex;
     justify-content: space-between;
@@ -10,6 +10,21 @@
   .logo {
     font-size: 1.5em;
   }
+  
+    .nav_name {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;  
+      height: 30px; 
+      background-color: #B1DBEC;
+      border-radius: 50%; 
+      color: #000; 
+      font-size: 16px; 
+      font-weight: bold; 
+      text-align: center; 
+      line-height: 50px; 
+    }
   
   .nav ul {
     list-style: none;
